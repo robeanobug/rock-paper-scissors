@@ -14,11 +14,6 @@ function getComputerChoice() {
     return computerChoice;
 }
 
-// function getHumanChoice() {
-//     const humanChoice = prompt("Rock, paper, scissors, shoot!");
-//     return humanChoice;
-// }
-
 let humanScore = 0;
 let computerScore = 0;
 
@@ -43,9 +38,21 @@ function playRound(humanChoice) {
     }
 }
 
-function playGame() {
-
-    for (let i = 0; i < 1; i++) {
-        playRound(humanChoice, computerChoice);
-    }
+function playGame(humanChoice) {
+    playRound(humanChoice, computerChoice)
 }
+
+const playRock = document.querySelector("#playRock");
+playRock.addEventListener("click", () => {
+    playRound('rock');
+})
+
+const playPaper = document.querySelector("#playPaper");
+playPaper.addEventListener("click", () => {
+    playRound('paper');
+})
+
+const playScissors = document.querySelector("#playScissors");
+playScissors.addEventListener("click", () => {
+    playRound('scissors');
+})
