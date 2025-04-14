@@ -1,4 +1,5 @@
 let computerChoice = '';
+let humanChoice = '';
 
 function getComputerChoice() { 
     const random = Math.floor(Math.random() * 3);
@@ -12,6 +13,11 @@ function getComputerChoice() {
         computerChoice = "scissors";
     }
     return computerChoice;
+}
+
+function getHumanChoice() {
+    humanChoice = prompt("Rock, paper, scissors, shoot!");
+    return humanChoice;
 }
 
 let humanScore = 0;
@@ -38,9 +44,14 @@ function playRound(humanChoice) {
     }
 }
 
-function playGame(humanChoice) {
-    playRound(humanChoice, computerChoice)
+function playGame() {
+    for (let i = 0; i < 5; i++) {
+        getHumanChoice();
+        playRound(humanChoice);
+    }
 }
+
+playGame();
 
 const playRock = document.querySelector("#playRock");
 playRock.addEventListener("click", () => {
