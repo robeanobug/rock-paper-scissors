@@ -1,6 +1,11 @@
 let computerChoice = '';
 let humanChoice = '';
+let roundsPlayed = 0;
+let maxRounds = 5;
+let humanScore = 0;
+let computerScore = 0;
 
+// allows computer to choose between rock paper or scissors
 function getComputerChoice() { 
     const random = Math.floor(Math.random() * 3);
     if (random === 0) {
@@ -15,55 +20,66 @@ function getComputerChoice() {
     return computerChoice;
 }
 
-function getHumanChoice() {
-    humanChoice = prompt("Rock, paper, scissors, shoot!");
-    return humanChoice;
-}
+// prompt the user to type in rock paper or scissors
+// function getHumanChoice() {
+//     humanChoice = prompt("Rock, paper, scissors, shoot!");
+//     return humanChoice;
+// }
 
-let humanScore = 0;
-let computerScore = 0;
-
+// plays one round and updates UI and score
 function playRound(humanChoice) {
-    getComputerChoice();
-    console.log(`You chose ${humanChoice}. Computer chose ${computerChoice}.`)
+    computerChoice = getComputerChoice();
 
+    const whoPlayedWhatDiv = document.getElementById("whoPlayedWhat");
+    const resultDiv = document.getElementById("results");
+    const scoreDiv = document.getElementById("score");
+
+    whoPlayedWhatDiv.textContent = (`You chose ${humanChoice}. Computer chose ${computerChoice}.`);
+    
     if (humanChoice === computerChoice) {
-        console.log(`You both picked ${humanChoice}. Try again.`)
+        resultDiv.textContent = (`You both picked ${humanChoice}. Try again.`)
         return;
     } else if (
         (humanChoice === "rock" && computerChoice === "paper") ||
         (humanChoice === "paper" && computerChoice === "scissors") ||
-        (humanChoice === "scissors" && computerChoice === "rock")) {
-            computerScore++;
-            console.log(`Computer wins!`);
-            console.log(`Score is You: ${humanScore} Computer: ${computerScore}.`);
+        (humanChoice === "scissors" && computerChoice === "rock")
+    ) {
+        computerScore++;
+        resultDiv.textContent = `Computer wins this round.`;
     } else {
         humanScore++;
-        console.log(`You win!`);
-        console.log(`Score is You: ${humanScore} Computer: ${computerScore}.`);
+        resultDiv.textContent = `You won this round.`;
     }
+    roundsPlayed++;
+    scoreDiv.textContent = (`Score is You: ${humanScore} Computer: ${computerScore}.`);
 }
 
+// sets up game logic with event listeners
 function playGame() {
-    for (let i = 0; i < 5; i++) {
-        getHumanChoice();
-        playRound(humanChoice);
-    }
+    const buttons = document.querySelectorAll(".choice-button");
+    const winnerDiv = document.querySelector("#winner");
+    
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            // makes sure game doesn't break after max number of rounds.
+            if (roundsPlayed >= maxRounds) return;
+
+            // accesses dataset choice propery and assigns to humanChoice
+            const humanChoice = button.dataset.choice;
+            // calls playRound with 
+            playRound(humanChoice);
+
+            if (roundsPlayed === maxRounds) {
+                if (humanScore > computerScore) {
+                    winnerDiv.textContent = (`You are the winner!!!`);
+                } else if (computerScore > humanScore) {
+                    winnerDiv.textContent = (`Computer wins...womp womp.`);
+                } else {
+                    winnerDiv.textContent = (`It's a tie!`);
+                }
+            }
+        });
+    });
 }
 
 playGame();
-
-const playRock = document.querySelector("#playRock");
-playRock.addEventListener("click", () => {
-    playRound('rock');
-})
-
-const playPaper = document.querySelector("#playPaper");
-playPaper.addEventListener("click", () => {
-    playRound('paper');
-})
-
-const playScissors = document.querySelector("#playScissors");
-playScissors.addEventListener("click", () => {
-    playRound('scissors');
-})
